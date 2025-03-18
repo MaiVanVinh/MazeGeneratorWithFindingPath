@@ -9,8 +9,25 @@ export class Cell {
         this.walls = [true, true, true, true]; // top, right, bottom, left
     }
 
+    previousCell(preCell){
+       this.preCell = preCell;
+    }
+
+    getPreviousCell(){
+        return this.preCell;
+    }
+
+    hightlight(wide) {
+        var x = this.i * wide;
+        var y = this.j * wide;
+        stroke(0);
+        fill(255);
+        rect(x, y, wide, wide);
+    }
+
     display(wide) {
-        stroke(255);
+        stroke(0);
+        strokeWeight(4);
         noFill();
         var x = this.i * wide;
         var y = this.j * wide;
@@ -19,10 +36,11 @@ export class Cell {
         if (this.walls[1]) line(x + wide, y, x + wide, y + wide);
         if (this.walls[2]) line(x + wide, y + wide, x, y + wide);
         if (this.walls[3]) line(x, y + wide, x, y);
+        
 
         if (this.visited) {
             noStroke();
-            fill(255, 0, 255, 100);
+            fill(255, 0, 50, 100);
             rect(x, y, wide, wide);
         }
     }
@@ -47,12 +65,30 @@ export class Cell {
         return undefined;
     }
 
+    getNeighbors(grid) {
+        let neighbors = [];
+    
+        let top = grid[this.getIndex(this.i, this.j - 1)];
+        let right = grid[this.getIndex(this.i + 1, this.j)];
+        let bottom = grid[this.getIndex(this.i, this.j + 1)];
+        let left = grid[this.getIndex(this.i - 1, this.j)];
+    
+        if (top && !this.walls[0]) neighbors.push(top);
+        if (right && !this.walls[1]) neighbors.push(right);
+        if (bottom && !this.walls[2]) neighbors.push(bottom);
+        if (left && !this.walls[3]) neighbors.push(left);
+    
+        return neighbors;
+    }
+    
+
     hightlightCurrentCell(wide) {
         var x = this.i * wide;
         var y = this.j * wide;
         noStroke();
         fill(0, 0, 255, 100);
         rect(x, y, wide, wide);
+        rect((this.cols-1)*wide,(this.rows-1)*wide,wide,wide);
     }
 
     getIndex(i, j) {
