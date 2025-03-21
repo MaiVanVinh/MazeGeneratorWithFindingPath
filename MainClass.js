@@ -25,7 +25,7 @@ if (findingPathButton) {
   }
 
 window.setup = function () {
-    let cnv = createCanvas(200, 200);
+    let cnv = createCanvas(400, 400);
     cnv.position(200, 50);
     frameRate(60);
 
