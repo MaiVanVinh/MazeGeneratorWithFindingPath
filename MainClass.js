@@ -1,23 +1,34 @@
 import { Cell } from "./Cell.js";
 import { Player } from "./Player.js";
+import { AStar } from "./findingPath/AStar.js";
 
+
+// Initialize the grid
 const wide = 40;
 var grid = [];
 var cols, rows;
+
+// Generate the maze using DFS
 var currentCell;
 var stack = [];
-var player;
-var shortestPath = [];
 
+// Initialize player to escape the maze
+var player;
+
+// Finding path Algorithms
+var shortestPath = [];
+var AStarAlgo = new AStar();
+
+
+// Handle the submission
 var findingPathButton = document.getElementById('summit') 
 if (findingPathButton) {
     findingPathButton.addEventListener('click', () => {
         let comboBox = document.getElementById('selectPath') 
         let option = comboBox.value;
-        console.log("yes");
         if(option == "A* Search"){
             let index = player.getIndex(player.i,player.j);
-            AStarAlgo(grid[index], grid[grid.length-1]);
+            shortestPath = AStarAlgo.Begin(grid[index], grid[grid.length-1],grid);
 
         }
           
@@ -69,6 +80,9 @@ window.draw = function () {
         }
         player.drawPlayer();
     }
+    let index = player.getIndex(player.i,player.j);
+    if(grid[index] == grid[grid.length-1])
+        console.log("Good boi")
 };
 
 window.keyPressed = function () {
@@ -103,74 +117,6 @@ function removeWalls(a, b) {
         a.walls[2] = false;
         b.walls[0] = false;
     }
-}
-
-function AStarAlgo(start,end){
-    let openSet  = [];
-    let closeSet = [];
-    
-    start.g = 0;
-    start.h = heuristic(start, end);
-    start.f = start.g + start.h;
-
-    openSet.push(start);
-
-    while(openSet.length > 0){
-        // Pick the lowest f value from the openSet
-        let index = 0;
-        let minValue = Number.MAX_SAFE_INTEGER;
-        for(let i = 0; i < openSet.length; i++){
-            if(minValue < openSet[i].f){
-                minValue = openSet[i].f;
-                index = i;
-            }
-
-        }
-
-        let current = openSet[index];
-
-        if(current === end){
-            console.log("Path Found");
-            let temp = current;
-            shortestPath.push(temp);
-            while (temp.getPreviousCell()) {
-                shortestPath.push(temp.getPreviousCell());
-                temp = temp.getPreviousCell();
-            }
-
-            return shortestPath;
-        }
-        
-        openSet.splice(current,1);
-        closeSet.push(current);
-        
-        // Now explore all the neighbors of current node
-        let neighbors = current.getNeighbors(grid);
-        for(let n of neighbors){
-            if(closeSet.includes(n))
-                continue;
-
-            let tempG = n.g + 1;
-            if(!openSet.includes(n)){
-                n.g = tempG;
-                openSet.push(n);
-            }else{
-                if(tempG < n.g){
-                   n.g = tempG;
-                }    
-            }
-
-            n.previousCell(current);
-            n.h = heuristic(n,end);
-            n.f = n.g + n.h;
-            
-        }
-      
-    }return [];
-}
-
-function heuristic(a,b){
-   return abs (a.i - b.i) + abs (a.j - b.j);
 }
 
 function drawPath() {
