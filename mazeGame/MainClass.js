@@ -18,7 +18,7 @@ let mazeGenerated = false;
 // Initialize player
 let player;
 let shortestPath = [];
-let AStarAlgo = new AStar();
+
 
 window.setup = function () {
     cnv = createCanvas(1200, 600);
@@ -90,12 +90,17 @@ function drawPath() {
     endShape();
 }
 
+
+
 let findingPathButton = document.getElementById('submit');
 if (findingPathButton) {
     findingPathButton.addEventListener('click', () => {
+        document.getElementById("selectPath").disabled = true;
+        document.getElementById("submit").disabled = true;
         let comboBox = document.getElementById('selectPath');
         let option = comboBox.value;
         if (option === "A* Search") {
+            let AStarAlgo = new AStar();
             let index = player.getIndex(player.i, player.j);
             shortestPath = AStarAlgo.Begin(grid[index], grid[cols - 1], grid);
         }
@@ -106,6 +111,8 @@ if (findingPathButton) {
 let generatingMaze = document.getElementById('submitMaze');
 if (generatingMaze) {
     generatingMaze.addEventListener('click', () => {
+        document.getElementById("selectPath").disabled = false;
+        document.getElementById("submit").disabled = false;
         let comboBox = document.getElementById('chooseAlgo');
         let option = comboBox.value;
         if (option === "Eller") {
