@@ -6,15 +6,19 @@ export class Player {
         this.j = j;
         this.c = c;
         this.r = r;
-        this.x = this.i * w + 10;
-        this.y = this.j * w + 10;
+        this.updatePosition();
         this.moving = [false, false, false, false]; // left, down, right, up
+    }
+
+    updatePosition(){
+        this.x = this.i * this.w + 5;
+        this.y = this.j * this.w + 5;
     }
 
     drawPlayer() {
         fill(255, 0, 0);
         noStroke();
-        rect(this.x, this.y, this.w - 20, this.w - 20);
+        rect(this.x, this.y, this.w/2, this.w/2);
     }
 
     updateMoving(grid,keyCode) {
@@ -29,11 +33,10 @@ export class Player {
         if (keyCode === UP_ARROW    && !cell.walls[0]) this.j--; // Up
         if (keyCode === DOWN_ARROW  && !cell.walls[2]) this.j++; // Down
 
-        this.x = this.i * this.w + 10;
-        this.y = this.j * this.w + 10;
-
+        this.updatePosition();
 
     }
+
 
 
     getIndex(i, j) {

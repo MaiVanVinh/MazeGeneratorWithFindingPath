@@ -82,13 +82,12 @@ export class Cell {
     }
     
 
-    hightlightCurrentCell(wide) {
+    hightlightCell(wide) {
         var x = this.i * wide;
         var y = this.j * wide;
         noStroke();
         fill(0, 0, 255, 100);
         rect(x, y, wide, wide);
-        rect((this.cols-1)*wide,(this.rows-1)*wide,wide,wide);
     }
 
     getIndex(i, j) {
