@@ -35,15 +35,17 @@ window.setup = function () {
 window.draw = function () {
     background(51);
 
-    if (ellerSelection && !mazeGenerated) {
+    if (ellerSelection && !mazeGenerated ) {
         resetGrid();
         let eller = new Eller(grid, cols, rows);
         grid = eller.EllerAlgo();
+        ellerSelection = false;
         mazeGenerated = true; 
     }else if(dfsSelection && !mazeGenerated){
         resetGrid();
         let dfs = new DFS(grid,wide);
         dfs.Begin();
+        dfsSelection = false;
         mazeGenerated = true; 
     }
 
@@ -109,7 +111,7 @@ if (generatingMaze) {
         if (option === "Eller") {
             ellerSelection = true;
             mazeGenerated = false; 
-        } else {
+        } else if(option === "DFS") {
             dfsSelection = true;
             mazeGenerated = false; 
         }
