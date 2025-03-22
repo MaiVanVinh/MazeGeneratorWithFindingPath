@@ -1,8 +1,8 @@
-import { Cell }   from "./Cell.js";
-import { Player } from "./Player.js";
-import { AStar }  from "./findingPath/AStar.js";
-import { Eller }  from "./generatingMaze/Eller.js";
-import { DFS }    from "./generatingMaze/DFS.js";
+import { Cell }   from "/mazeGame/Cell.js"; 
+import { Player } from "/mazeGame/Player.js";
+import { AStar }  from "/findingPath/AStar.js";
+import { Eller }  from "/generatingMaze/Eller.js";
+import { DFS }    from "/generatingMaze/DFS.js";
 
 // Initialize the grid
 const wide = 30;
