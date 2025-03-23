@@ -5,9 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maze Generator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+       
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(223, 225, 241);
+            color: rgb(101, 77, 77);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 24px;
+            transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+        }
+
+     
+        #removeOverlayButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+    
+        .slide-away {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
-    <script type="module" src="MainClass.js" ></script>
+
+    <!-- Overlay Layer -->
+    <div id="overlay">
+        <p>Welcome to the Maze Generator!</p>
+        <button id="removeOverlayButton">Start</button>
+    </div>
+
+    <script type="module" src="/mazeGame/MainClass.js"></script>
 
     <div class="findingPath">
         <label for="selectPath">Choose a path finding:</label>
@@ -17,8 +61,18 @@
             <option value="banana">Banana</option>
             <option value="cherry">Cherry</option>
         </select>
-
-        <button id="summit">Summit</button>
+        <button id="submit">Submit</button>
     </div>
+
+    <div class="generatingMaze">
+        <label for="chooseAlgo">Choose an algorithm to create a maze:</label>
+        <select id="chooseAlgo" name="Maze generator algo">
+            <option value="nothing"></option>
+            <option value="Eller">Eller</option>
+            <option value="DFS">DFS</option>
+        </select>
+        <button id="submitMaze">Submit</button>
+    </div>
+
 </body>
 </html>
