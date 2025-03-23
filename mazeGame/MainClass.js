@@ -22,7 +22,7 @@ let shortestPath = [];
 
 window.setup = function () {
     cnv = createCanvas(1200, 600);
-    cnv.position(100, 50);
+    cnv.position(30, 60);
     cnv.hide();
     frameRate(60);
 
@@ -90,50 +90,129 @@ function drawPath() {
     endShape();
 }
 
+// Handling UI Button
+
+let mainMazeDiv = document.getElementById("generatingMazeButton");
+let secondMazeDiv = document.getElementById("generatingMazeContainer");
+let optionMaze = document.querySelectorAll(".mazeOption");
+let check = false;
+function showMazeSecondDiv() {
+    secondMazeDiv.style.display = "flex"; 
+    setTimeout(() => {
+        optionMaze.forEach(option => option.classList.add("show")); 
+    }, 10);
+}
+
+function hideMazeSecondDiv() {
+    optionMaze.forEach(option => option.classList.remove("show")); 
+    setTimeout(() => {
+        if (!secondMazeDiv.matches(':hover') && !mainMazeDiv.matches(':hover')) 
+            secondMazeDiv.style.display = "none";               
+    }, 100); 
+}
+
+mainMazeDiv.addEventListener("mouseenter", showMazeSecondDiv);
+
+mainMazeDiv.addEventListener("mouseleave", function() {
+    setTimeout(() => {
+        if (!secondMazeDiv.matches(':hover')) hideMazeSecondDiv();
+    }, 100);
+});
+
+secondMazeDiv.addEventListener("mouseleave", hideMazeSecondDiv);
+
+let generatingMaze = document.querySelectorAll(".mazeOption");
+generatingMaze.forEach(element => {
+    element.addEventListener("click", () => {
+        let option = element.textContent.trim(); 
+        check = true;  
+        document.getElementById('findingPathButton').addEventListener("mouseenter",showSecondDiv);
+        document.getElementById('findingPathButton').innerText = 'Finding Path'; 
+        document.getElementById("findingPathButton").addEventListener("mouseenter", showSecondDiv); 
+        if (option === "Eller") {
+            ellerSelection = true;
+            dfsSelection = false; 
+            mazeGenerated = false;
+        } else if (option === "DFS") {
+            dfsSelection = true;
+            ellerSelection = false; 
+            mazeGenerated = false;
+        }
+        
+        if(findingPathContainer !== undefined){
+            findingPathContainer.forEach(e => {
+                e.classList.remove("disabled");
+            });
+        }    
+    });
+});
 
 
-let findingPathButton = document.getElementById('submit');
-if (findingPathButton) {
-    findingPathButton.addEventListener('click', () => {
-        document.getElementById("selectPath").disabled = true;
-        document.getElementById("submit").disabled = true;
-        let comboBox = document.getElementById('selectPath');
-        let option = comboBox.value;
+let mainPathDiv = document.getElementById("findingPathButton");
+let secondPathDiv = document.getElementById("findingPathContainer");
+let optionFindingSearch = document.querySelectorAll(".pathOption");
+
+function showSecondDiv() {
+    secondPathDiv.style.display = "flex"; 
+    setTimeout(() => {
+        optionFindingSearch.forEach(option => option.classList.add("show")); 
+    }, 10);
+}
+
+function hideSecondDiv() {
+    optionFindingSearch.forEach(option => option.classList.remove("show")); 
+    setTimeout(() => {
+        if (!secondPathDiv.matches(':hover') && !mainPathDiv.matches(':hover')) {
+            secondPathDiv.style.display = "none"; 
+        }
+    }, 100); 
+}
+
+    mainPathDiv.removeEventListener("mouseenter", showSecondDiv);
+
+    mainPathDiv.addEventListener("mouseleave", function() {
+        setTimeout(() => {
+            if (!secondPathDiv.matches(':hover')) hideSecondDiv();
+        }, 100);
+    });
+
+    secondPathDiv.addEventListener("mouseleave", hideSecondDiv);
+
+let findingPathButton = document.getElementById('findingPathButton');
+findingPathButton.addEventListener('click', () => {
+    if(!check)
+        window.alert("You should create a maze first");
+});
+
+let findingPathContainer = document.querySelectorAll(".pathOption");
+findingPathContainer.forEach(element => {
+    element.addEventListener("click", () => {
+        let option = element.textContent.trim();  
+        document.getElementById('findingPathButton').innerText = option;      
         if (option === "A* Search") {
             let AStarAlgo = new AStar();
             let index = player.getIndex(player.i, player.j);
             shortestPath = AStarAlgo.Begin(grid[index], grid[cols - 1], grid);
-        }
-             
+        } 
+        findingPathContainer.forEach(e => {
+            e.classList.add("disabled");
+        });
     });
-}
-
-let generatingMaze = document.getElementById('submitMaze');
-if (generatingMaze) {
-    generatingMaze.addEventListener('click', () => {
-        document.getElementById("selectPath").disabled = false;
-        document.getElementById("submit").disabled = false;
-        let comboBox = document.getElementById('chooseAlgo');
-        let option = comboBox.value;
-        if (option === "Eller") {
-            ellerSelection = true;
-            mazeGenerated = false; 
-        } else if(option === "DFS") {
-            dfsSelection = true;
-            mazeGenerated = false; 
-        }
-    });
-}
+});
 
 
 
 const startGame = document.getElementById("removeOverlayButton");
 if(startGame){
     let overlay = document.getElementById("overlay");
+    let findingPathButton = document.getElementById("findingPathButton");
+    let generatingMazeButton = document.getElementById("generatingMazeButton");
     startGame.addEventListener("click", () => {
         overlay.classList.add("slide-away");
         setTimeout(() => {
             overlay.style.display = "none"; 
+            findingPathButton.style.display = "flex"; 
+            generatingMazeButton.style.display = "flex"; 
             cnv.show();
         }, 800);
         
