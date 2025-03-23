@@ -15,6 +15,12 @@ export class Player {
         this.y = this.j * this.w + 5;
     }
 
+    resetPosition(){
+        this.i = 0;
+        this.j = 0;
+        this.x = this.i * this.w + 5;
+        this.y = this.j * this.w + 5;
+    }
     drawPlayer() {
         fill(255, 0, 0);
         noStroke();

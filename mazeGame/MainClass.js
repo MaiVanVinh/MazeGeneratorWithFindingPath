@@ -138,7 +138,7 @@ generatingMaze.forEach(element => {
             ellerSelection = false; 
             mazeGenerated = false;
         }
-        
+        player.resetPosition();
         if(findingPathContainer !== undefined){
             findingPathContainer.forEach(e => {
                 e.classList.remove("disabled");
