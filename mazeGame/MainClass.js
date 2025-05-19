@@ -3,6 +3,7 @@ import { Player } from "/mazeGame/Player.js";
 import { AStar }  from "/findingPath/AStar.js";
 import { Eller }  from "/generatingMaze/Eller.js";
 import { DFS }    from "/generatingMaze/DFS.js";
+import { Dijkstra }  from "/findingPath/Dijkstra.js";
 
 // Initialize the grid
 const wide = 30;
@@ -193,6 +194,11 @@ findingPathContainer.forEach(element => {
             let AStarAlgo = new AStar();
             let index = player.getIndex(player.i, player.j);
             shortestPath = AStarAlgo.Begin(grid[index], grid[cols - 1], grid);
+        }
+        if (option === "Dijkstra") {
+            let dijkstra = new Dijkstra();
+            let index = player.getIndex(player.i, player.j);
+            shortestPath = dijkstra.Begin(grid[index], grid[cols - 1], grid);
         } 
         findingPathContainer.forEach(e => {
             e.classList.add("disabled");
