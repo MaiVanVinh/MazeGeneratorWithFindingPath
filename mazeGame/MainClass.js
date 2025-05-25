@@ -4,6 +4,7 @@ import { AStar }  from "/findingPath/AStar.js";
 import { Eller }  from "/generatingMaze/Eller.js";
 import { DFS }    from "/generatingMaze/DFS.js";
 import { Dijkstra }  from "/findingPath/Dijkstra.js";
+import { Dfs } from "/findingPath/Dfs.js";
 
 // Initialize the grid
 const wide = 30;
@@ -203,6 +204,11 @@ findingPathContainer.forEach(element => {
         findingPathContainer.forEach(e => {
             e.classList.add("disabled");
         });
+        if (option === "DFS"){
+            let dfs = new Dfs();
+            let index = player.getIndex(player.i, player.j);
+            shortestPath = dfs.Begin(grid[index], grid[cols - 1], grid);
+        }
     });
 });
 
