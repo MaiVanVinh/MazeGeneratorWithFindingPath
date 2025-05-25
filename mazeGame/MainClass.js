@@ -1,9 +1,10 @@
-import { Cell }   from "/mazeGame/Cell.js"; 
-import { Player } from "/mazeGame/Player.js";
-import { AStar }  from "/findingPath/AStar.js";
-import { Eller }  from "/generatingMaze/Eller.js";
-import { DFS }    from "/generatingMaze/DFS.js";
-import { Dijkstra }  from "/findingPath/Dijkstra.js";
+import { Cell }       from "/mazeGame/Cell.js"; 
+import { Player }     from "/mazeGame/Player.js";
+import { AStar }      from "/findingPath/AStar.js";
+import { Eller }      from "/generatingMaze/Eller.js";
+import { DFS }        from "/generatingMaze/DFS.js";
+import { Dijkstra }   from "/findingPath/Dijkstra.js";
+import { DfsFinding } from "/findingPath/DfsFinding.js";
 
 // Initialize the grid
 const wide = 30;
@@ -15,15 +16,16 @@ let cnv;
 let ellerSelection = false;
 let dfsSelection = false;
 let mazeGenerated = false; 
+let dfs = null;
+let eller = null;
 
 // Initialize player
 let player;
 let shortestPath = [];
 
-
 window.setup = function () {
-    cnv = createCanvas(1200, 600);
-    cnv.position(30, 60);
+    cnv = createCanvas(300, 300);
+    cnv.position(50, 60);
     cnv.hide();
     frameRate(60);
 
@@ -35,31 +37,47 @@ window.setup = function () {
 
 window.draw = function () {
     background(51);
-
-    if (ellerSelection && !mazeGenerated ) {
-        resetGrid();
-        let eller = new Eller(grid, cols, rows);
-        grid = eller.EllerAlgo();
-        ellerSelection = false;
-        mazeGenerated = true; 
-    }else if(dfsSelection && !mazeGenerated){
-        resetGrid();
-        let dfs = new DFS(grid,wide);
-        dfs.Begin();
-        dfsSelection = false;
-        mazeGenerated = true; 
-    }
-
+    handleMazeGenerator();
+    player.drawPlayer();
+    if (shortestPath.length > 0) drawPath();
     for (let i = 0; i < grid.length; i++) {
         grid[i].display(wide);
-        grid[cols-1].hightlightCell(wide);
+        grid[cols - 1].hightlightCell(wide);
+    }
+    
+};
+
+function handleMazeGenerator(){
+    if (ellerSelection && !mazeGenerated) {
+        if (!eller) {
+            resetGrid();
+            eller = new Eller(grid, cols, rows);
+        }
+
+        if (!eller.finished) {
+            eller.Step();
+        } else {
+            mazeGenerated = true;
+            ellerSelection = false;
+            eller = null;
+        }
     }
 
-    player.drawPlayer();
-    if (shortestPath.length > 0) {
-        drawPath();
+    if (dfsSelection && !mazeGenerated) {
+        if (!dfs ) {
+            resetGrid();
+            dfs = new DFS(grid, wide);
+        }
+
+        if (!dfs.finished) {
+            dfs.Step(); 
+        } else {
+            mazeGenerated = true;
+            dfsSelection = false;
+            dfs = null;
+        }
     }
-};
+}
 
 
 window.keyPressed = function () {
@@ -200,6 +218,11 @@ findingPathContainer.forEach(element => {
             let index = player.getIndex(player.i, player.j);
             shortestPath = dijkstra.Begin(grid[index], grid[cols - 1], grid);
         } 
+        if (option === "DFS"){
+            let dfs = new DfsFinding();
+            let index = player.getIndex(player.i, player.j);
+            shortestPath = dfs.Begin(grid[index], grid[cols - 1], grid);
+        }
         findingPathContainer.forEach(e => {
             e.classList.add("disabled");
         });

@@ -90,6 +90,14 @@ export class Cell {
         rect(x, y, wide, wide);
     }
 
+    hightlightAnimation(wide){
+        var x = this.i * wide;
+        var y = this.j * wide;
+        noStroke();
+        fill('yellow');
+        rect(x, y, wide, wide);
+    }
+
     getIndex(i, j) {
         if (i < 0 || j < 0 || i >= this.cols || j >= this.rows) return -1;
         return i + j * this.cols;

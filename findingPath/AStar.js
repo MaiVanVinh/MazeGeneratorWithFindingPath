@@ -11,7 +11,7 @@ export class AStar{
         start.f = start.g + start.h;
 
         openSet.push(start);
-
+        
         while(openSet.length > 0){
             // Pick the lowest f value from the openSet
             let index = 0;
@@ -25,7 +25,7 @@ export class AStar{
             }
 
             let current = openSet[index];
-
+            
             if(current === end){
                 console.log("Path Found");
                 let temp = current;
@@ -34,7 +34,7 @@ export class AStar{
                     shortestPath.push(temp.getPreviousCell());
                     temp = temp.getPreviousCell();
                 }
-
+   
                 return shortestPath;
             }
             
@@ -44,9 +44,9 @@ export class AStar{
             // Now explore all the neighbors of current node
             let neighbors = current.getNeighbors(grid);
             for(let n of neighbors){
+            
                 if(closeSet.includes(n))
                     continue;
-
                 let tempG = n.g + 1;
                 if(!openSet.includes(n)){
                     n.g = tempG;
@@ -63,7 +63,9 @@ export class AStar{
                 
             }
         
-        }return [];
+        }
+        return [];
+        
     }
 
     heuristic(a,b){
