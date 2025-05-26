@@ -1,5 +1,10 @@
 export class Dijkstra {
+    constructor(){
+        this.numOfCellVisited = 1;
+    }
+
     Begin(start, end, grid) {
+        this.numOfCellVisited = 1;
         let dist = new Map();
         let prev = new Map();
         let visited = new Set();
@@ -14,6 +19,7 @@ export class Dijkstra {
         dist.set(start, 0);
 
         while (queue.length > 0) {
+            
             // Sort queue by shortest distance (mimicking a priority queue)
             queue.sort((a, b) => dist.get(a) - dist.get(b));
             let current = queue.shift();
@@ -26,12 +32,14 @@ export class Dijkstra {
                     path.push(temp);
                     temp = prev.get(temp);
                 }
+                console.log("Dijkstra is "+path.length+" with "+this.numOfCellVisited+" visited cells");
                 return path.reverse();
             }
 
             visited.add(current);
 
             for (let neighbor of current.getNeighbors(grid)) {
+                this.numOfCellVisited++;
                 if (visited.has(neighbor)) continue;
 
                 let alt = dist.get(current) + 1; // All edges cost 1

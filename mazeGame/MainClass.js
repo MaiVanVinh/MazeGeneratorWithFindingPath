@@ -21,10 +21,15 @@ let eller = null;
 
 // Initialize player
 let player;
-let shortestPath = [];
+
+// Path Finding Options
+let shortestPathAStart = [];
+let shortestPathDFS = [];
+let shortestPathDijkstra = [];
+
 
 window.setup = function () {
-    cnv = createCanvas(300, 300);
+    cnv = createCanvas(1200, 500);
     cnv.position(50, 60);
     cnv.hide();
     frameRate(60);
@@ -39,7 +44,7 @@ window.draw = function () {
     background(51);
     handleMazeGenerator();
     player.drawPlayer();
-    if (shortestPath.length > 0) drawPath();
+    findingPath();
     for (let i = 0; i < grid.length; i++) {
         grid[i].display(wide);
         grid[cols - 1].hightlightCell(wide);
@@ -90,7 +95,9 @@ window.keyPressed = function () {
 
 function resetGrid(){
     grid.length = 0; 
-    shortestPath.length = 0;
+    shortestPathAStart.length = 0;
+    shortestPathDFS.length = 0;
+    shortestPathDijkstra.length = 0;
     for (let j = 0; j < rows; j++) {
         for (let i = 0; i < cols; i++) {
             grid.push(new Cell(i, j, cols, rows));
@@ -98,12 +105,20 @@ function resetGrid(){
     }
 }
 
-function drawPath() {
-    stroke(0, 255, 0);
+function findingPath(){
+    if(shortestPathAStart.length > 0) drawPath(shortestPathAStart,0);
+    if(shortestPathDFS.length > 0) drawPath(shortestPathDFS,1);
+    if(shortestPathDijkstra.length > 0) drawPath(shortestPathDijkstra,2);
+}
+function drawPath(path ,color) {
+    if(color === 0) stroke('white')
+    if(color === 1) stroke('yellow')
+    if(color === 2) stroke('blue')
+    
     strokeWeight(4);
     noFill();
     beginShape();
-    for (let cell of shortestPath) {
+    for (let cell of path) {
         vertex(cell.i * wide + wide / 2, cell.j * wide + wide / 2);
     }
     endShape();
@@ -211,21 +226,21 @@ findingPathContainer.forEach(element => {
         if (option === "A* Search") {
             let AStarAlgo = new AStar();
             let index = player.getIndex(player.i, player.j);
-            shortestPath = AStarAlgo.Begin(grid[index], grid[cols - 1], grid);
+            shortestPathAStart = AStarAlgo.Begin(grid[index], grid[cols - 1], grid);
         }
         if (option === "Dijkstra") {
             let dijkstra = new Dijkstra();
             let index = player.getIndex(player.i, player.j);
-            shortestPath = dijkstra.Begin(grid[index], grid[cols - 1], grid);
+            shortestPathDijkstra = dijkstra.Begin(grid[index], grid[cols - 1], grid);
         } 
         if (option === "DFS"){
             let dfs = new DfsFinding();
             let index = player.getIndex(player.i, player.j);
-            shortestPath = dfs.Begin(grid[index], grid[cols - 1], grid);
+            shortestPathDFS = dfs.Begin(grid[index], grid[cols - 1], grid);
         }
-        findingPathContainer.forEach(e => {
-            e.classList.add("disabled");
-        });
+        // findingPathContainer.forEach(e => {
+        //     e.classList.add("disabled");
+        // });
     });
 });
 
