@@ -94,6 +94,7 @@ window.keyPressed = function () {
 
 
 function resetGrid(){
+    console.log("\n");
     grid.length = 0; 
     shortestPathAStart.length = 0;
     shortestPathDFS.length = 0;
